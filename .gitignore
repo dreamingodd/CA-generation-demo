@@ -1,0 +1,29 @@
+# Maven #
+target/
+
+# IDEA #
+.idea/
+*.iml
+
+# Eclipse #
+.settings/
+.classpath
+.project
+
+# jrebel #
+src/main/resources/rebel.xml
+
+# database #
+application.yml
+/mybatis/src/main/resources/generatorConfig.xml
+
+# log #
+log
+logs
+
+# others #
+rebel.xml
+**/output/*.java
+**/output/*.xml
+
+LOG_PATH_IS_UNDEFINED/
