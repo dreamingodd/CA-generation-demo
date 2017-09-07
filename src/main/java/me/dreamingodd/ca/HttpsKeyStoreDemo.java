@@ -1,4 +1,4 @@
-package me.ywd.ca;
+package me.dreamingodd.ca;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -17,19 +17,22 @@ import java.security.KeyStore;
 
 
 /**
+ * #1
  * HTTPS 双向认证 - direct into cacerts
  * @Author Ye_Wenda
  * @Date 7/11/2017
  */
-public class HttpsClientDemo {
-    private final static String PFX_PATH = "C:\\Development\\deployment\\ssl\\ca-demo\\client.p12";   //客户端证书路径
+public class HttpsKeyStoreDemo {
+    // 客户端证书路径，用了本地绝对路径，需要修改
+    private final static String PFX_PATH = "C:\\Development\\deployment\\ssl\\ca-demo\\client.p12";
     private final static String PFX_PWD = "demo"; //客户端证书密码及密钥库密码
 
     public static String sslRequestGet(String url) throws Exception {
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
         InputStream instream = new FileInputStream(new File(PFX_PATH));
         try {
-            keyStore.load(instream, PFX_PWD.toCharArray());//这里就指的是KeyStore库的密码
+            // 这里就指的是KeyStore库的密码
+            keyStore.load(instream, PFX_PWD.toCharArray());
         } finally {
             instream.close();
         }
@@ -47,7 +50,8 @@ public class HttpsClientDemo {
             CloseableHttpResponse response = httpclient.execute(httpget);
             try {
                 HttpEntity entity = response.getEntity();
-                String jsonStr = EntityUtils.toString(response.getEntity(), "UTF-8");//返回结果
+                // 返回结果
+                String jsonStr = EntityUtils.toString(response.getEntity(), "UTF-8");
                 EntityUtils.consume(entity);
                 return jsonStr;
             } finally {
@@ -59,7 +63,6 @@ public class HttpsClientDemo {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println(System.getProperty("java.home"));
         System.out.println(sslRequestGet("https://ssl.demo.com/"));
     }
 
