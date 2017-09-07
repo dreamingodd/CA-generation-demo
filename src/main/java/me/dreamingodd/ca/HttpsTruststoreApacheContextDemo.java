@@ -23,10 +23,14 @@ import java.security.SecureRandom;
  * @Date 7/11/2017
  */
 public class HttpsTruststoreApacheContextDemo {
-
-    private final static String CLIENT_CERT_FILE = "C:/Development/deployment/ssl/ca-demo/client.p12";   //客户端证书路径
-    private final static String PFX_PWD = "demo"; //客户端证书密码
-    private final static String TRUST_STRORE_FILE = "C:/Development/deployment/ssl/ca-demo/demo.truststore";
+    // 客户端证书路径，用了本地绝对路径，需要修改
+    private final static String CLIENT_CERT_FILE = "C:/Development/deployment/ssl/ca-demo/client.p12";
+    // 客户端证书密码
+    private final static String CLIENT_PWD = "demo";
+    // 信任库路径
+    private final static String TRUST_STRORE_FILE = "C:\\Development\\deployment\\ssl\\ca-demo\\demo.truststore";
+    // 信任库密码
+    private final static String TRUST_STORE_PWD = "demodemo";
 
 
     private static String readResponseBody(InputStream inputStream) throws IOException {
@@ -43,17 +47,17 @@ public class HttpsTruststoreApacheContextDemo {
         }
     }
 
-    public static void test1() throws Exception {
+    public static void httpsCall() throws Exception {
         // 初始化密钥库
         KeyManagerFactory keyManagerFactory = KeyManagerFactory
                 .getInstance("SunX509");
-        KeyStore keyStore = getKeyStore(CLIENT_CERT_FILE, PFX_PWD, "PKCS12");
-        keyManagerFactory.init(keyStore, PFX_PWD.toCharArray());
+        KeyStore keyStore = getKeyStore(CLIENT_CERT_FILE, CLIENT_PWD, "PKCS12");
+        keyManagerFactory.init(keyStore, CLIENT_PWD.toCharArray());
 
         // 初始化信任库
         TrustManagerFactory trustManagerFactory = TrustManagerFactory
                 .getInstance("SunX509");
-        KeyStore trustkeyStore = getKeyStore(TRUST_STRORE_FILE, "012345","JKS");
+        KeyStore trustkeyStore = getKeyStore(TRUST_STRORE_FILE, TRUST_STORE_PWD,"JKS");
         trustManagerFactory.init(trustkeyStore);
 
 //        SSLContext sslContext = SSLContexts.custom().loadKeyMaterial(keyStore, "123456".toCharArray())
@@ -66,7 +70,7 @@ public class HttpsTruststoreApacheContextDemo {
 
         CloseableHttpClient closeableHttpClient = HttpClients.custom().setSSLContext(sslContext).build();
         HttpGet getCall = new HttpGet();
-        getCall.setURI(new URI("https://ssl.choosefine.com/api/get?command=1&region=1"));
+        getCall.setURI(new URI("https://ssl.demo.com"));
         CloseableHttpResponse response = closeableHttpClient.execute(getCall);
         System.out.println(convertStreamToString(response.getEntity().getContent()));
 
@@ -120,6 +124,6 @@ public class HttpsTruststoreApacheContextDemo {
 
 
     public static void main(String[] args) throws Exception {
-        test1();
+        httpsCall();
     }
 }
