@@ -1,4 +1,4 @@
-package me.ywd.ca;
+package me.dreamingodd.ca;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -16,14 +16,17 @@ import java.security.KeyStore;
 import java.security.SecureRandom;
 
 /**
+ * #3
+ * HTTPS 双向认证 - use truststore
+ * Apache插件
  * @Author Ye_Wenda
  * @Date 7/11/2017
  */
-public class HttpsSSLContext {
+public class HttpsTruststoreApacheContextDemo {
 
-    private final static String CLIENT_CERT_FILE = "C:/Development/deployment/ssl/ca6/client6.p12";   //客户端证书路径
-    private final static String PFX_PWD = "choosefine"; //客户端证书密码
-    private final static String TRUST_STRORE_FILE = "C:/Development/deployment/ssl/ca6/my2.truststore";
+    private final static String CLIENT_CERT_FILE = "C:/Development/deployment/ssl/ca-demo/client.p12";   //客户端证书路径
+    private final static String PFX_PWD = "demo"; //客户端证书密码
+    private final static String TRUST_STRORE_FILE = "C:/Development/deployment/ssl/ca-demo/demo.truststore";
 
 
     private static String readResponseBody(InputStream inputStream) throws IOException {
@@ -50,7 +53,7 @@ public class HttpsSSLContext {
         // 初始化信任库
         TrustManagerFactory trustManagerFactory = TrustManagerFactory
                 .getInstance("SunX509");
-        KeyStore trustkeyStore = getKeyStore(TRUST_STRORE_FILE,"choosefine","JKS");
+        KeyStore trustkeyStore = getKeyStore(TRUST_STRORE_FILE, "012345","JKS");
         trustManagerFactory.init(trustkeyStore);
 
 //        SSLContext sslContext = SSLContexts.custom().loadKeyMaterial(keyStore, "123456".toCharArray())

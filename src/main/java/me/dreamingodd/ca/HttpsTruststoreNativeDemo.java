@@ -1,4 +1,4 @@
-package me.ywd.ca;
+package me.dreamingodd.ca;
 
 import javax.net.ssl.*;
 import java.io.*;
@@ -8,16 +8,21 @@ import java.security.KeyStore;
 
 
 /**
+ * #2
  * HTTPS 双向认证 - use truststore
  * 原生方式
  * @Author Ye_Wenda
  * @Date 7/11/2017
  */
-public class HttpsTruststoreDemo {
-    private final static String CLIENT_CERT_FILE = "C:/Development/deployment/ssl/ca-choosefine/client/client.p12";   //客户端证书路径
-    private final static String PFX_PWD = "choosefine"; //客户端证书密码
-    //private final static String TRUST_STRORE_FILE = "D:/WORK/test/my.truststore";
-    private final static String TRUST_STRORE_FILE = "C:\\Development\\deployment\\ssl\\ca-choosefine\\truststore\\ca-server-pre.truststore";
+public class HttpsTruststoreNativeDemo {
+    // 客户端证书路径，用了本地绝对路径，需要修改
+    private final static String CLIENT_CERT_FILE = "C:/Development/deployment/ssl/ca-demo/client.p12";
+    // 客户端证书密码
+    private final static String CLIENT_PWD = "demo";
+    // 信任库路径
+    private final static String TRUST_STRORE_FILE = "C:\\Development\\deployment\\ssl\\ca-demo\\demo.truststore";
+    // 信任库密码
+    private final static String TRUST_STORE_PWD = "demodemo";
 
 
     private static String readResponseBody(InputStream inputStream) throws IOException {
@@ -34,17 +39,17 @@ public class HttpsTruststoreDemo {
         }
     }
 
-    public static void test1() throws Exception {
+    public static void httpsCall() throws Exception {
         // 初始化密钥库
         KeyManagerFactory keyManagerFactory = KeyManagerFactory
                 .getInstance("SunX509");
-        KeyStore keyStore = getKeyStore(CLIENT_CERT_FILE, PFX_PWD, "PKCS12");
-        keyManagerFactory.init(keyStore, PFX_PWD.toCharArray());
+        KeyStore keyStore = getKeyStore(CLIENT_CERT_FILE, CLIENT_PWD, "PKCS12");
+        keyManagerFactory.init(keyStore, CLIENT_PWD.toCharArray());
 
         // 初始化信任库
         TrustManagerFactory trustManagerFactory = TrustManagerFactory
                 .getInstance("SunX509");
-        KeyStore trustkeyStore = getKeyStore(TRUST_STRORE_FILE, PFX_PWD,"JKS");
+        KeyStore trustkeyStore = getKeyStore(TRUST_STRORE_FILE, TRUST_STORE_PWD,"JKS");
         trustManagerFactory.init(trustkeyStore);
 
         // 初始化SSL上下文
@@ -54,7 +59,7 @@ public class HttpsTruststoreDemo {
         SSLSocketFactory sf = ctx.getSocketFactory();
 
         HttpsURLConnection.setDefaultSSLSocketFactory(sf);
-        String url = "https://apipay-pre.sxiaobao.com";
+        String url = "https://ssl.demo.com";
         URL urlObj = new URL(url);
         HttpsURLConnection con = (HttpsURLConnection) urlObj.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
@@ -85,7 +90,7 @@ public class HttpsTruststoreDemo {
 
 
     public static void main(String[] args) throws Exception {
-        test1();
+        httpsCall();
     }
 
 }
